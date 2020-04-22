@@ -3,22 +3,23 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use Mews\Captcha\Facades\Captcha;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function loginForm()
     {
-        return view('auth.login');
+        $captcha = Captcha::img();
+        return view('auth.login',compact('captcha'));
     }
 
-    public function register()
+    public function registerForm()
     {
         return view('auth.register');
     }
 
-    public function store(Request $request)
+    public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|max:255|unique:users,name',
@@ -33,14 +34,15 @@ class AuthController extends Controller
 
         User::create($user);
 
-        return redirect()->route('login')->with('message', 'User was successfully created');
+        return redirect()->route('loginForm')->with('message', 'User was successfully created');
     }
 
-    public function authenticate(Request $request)
+    public function login(Request $request)
     {
         $validator = $request->validate([
             'login'     => 'required',
-            'password'  => 'required|min:6'
+            'password'  => 'required|min:6',
+            'captcha' => 'required|captcha'
         ]);
         
         $validName = User::where('email', $request->get('login'))->where('password', $request->get('password'))->firstOr(function () {
@@ -58,14 +60,14 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword()
+    public function resetPasswordForm()
     {
         $email = Crypt::decryptString(request('token'));
         $captcha = Captcha::img();
         return view('auth.resetPassword', compact('email','captcha'));
     }
 
-    public function updatePassword(Request $request)
+    public function resetPassword(Request $request)
     {
         $validator = $request->validate([
             'password'  => 'required|min:6|same:repeatPassword',

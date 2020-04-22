@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Mail;
 use Illuminate\Support\Facades\Crypt;
-use App\User;
+use App\Models\User;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 

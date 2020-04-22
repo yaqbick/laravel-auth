@@ -6,7 +6,7 @@
       @if ($errors->has('authentication'))
                   <div class="alert alert-danger" role="alert">{{ $errors->first('authentication') }}</div>
       @endif     
-        <form action="{{url('sendEmail')}}" method="POST" id="logForm">
+        <form action="{{url('auth/sendEmail')}}" method="POST" id="logForm">
         {{ csrf_field() }}
         <div class="form-label-group">
           <input type="email" name="emailToReset" id="inputEmail" class="form-control" placeholder="Email address" >

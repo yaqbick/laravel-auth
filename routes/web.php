@@ -16,12 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
-
-Route::get('/login','AuthController@login')->name('login');
-Route::get('/register','AuthController@register')->name('register');
-Route::post('/register','AuthController@store');
-Route::post('/login','AuthController@authenticate');
+Route::prefix('auth')->group(function () {
+Route::get('/login','AuthController@loginForm')->name('loginForm');
+Route::get('/register','AuthController@registerForm')->name('registerForm');
+Route::post('/register','AuthController@register')->name('register');
+Route::post('/login','AuthController@login')->name('login');;
 Route::get('/getAddress','MailController@getAddress')->name('getAddress');
 Route::post('/sendEmail','MailController@send')->name('sendEmail');
-Route::get('/reset-password','AuthController@resetPassword');
-Route::post('/reset-password','AuthController@updatePassword');
+Route::get('/reset-password','AuthController@resetPasswordForm')->name('resetPasswordForm');
+Route::post('/reset-password','AuthController@resetPassword')->name('resetPassword');
+});
